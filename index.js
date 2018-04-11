@@ -11,7 +11,11 @@ class UPX {
     
     this.serverless = serverless;
     this.options = options;
-    this.upx = upx(this.options)
+    this.upxOpts = Object.assign({}, 
+      this.serverless.service.custom && this.serverless.service.custom.upx ? this.serverless.service.custom.upx : {}, 
+      this.options ? this.options : {}
+    );
+    this.upx = upx(this.upxOpts);
 
     this.commands = {
       upx: {
@@ -63,14 +67,14 @@ class UPX {
 
   executeUpx() {
     let isGolangDefaultRuntime = this.serverless.service.provider.runtime === 'go1.x';
-    
+
     Object.keys(this.serverless.service.functions).forEach((key) => {
       let handler = this.serverless.service.functions[key].handler;
       let runtime = this.serverless.service.functions[key].runtime;
 
       if (handler && ((runtime === 'go1.x') || (!runtime && isGolangDefaultRuntime))) {
-        this.upx(handler).output(`${handler}.upx`).start().then((stats) => {
-          this.serverless.cli.log(JSON.stringify(stats));
+        this.upx(handler).start().then((stats) => {
+          this.serverless.cli.log(`Executed UPX on ${handler}: ${stats.fileSize.before} bytes -> ${stats.fileSize.after} bytes`);
         }).catch((err) => {
           if (!/.*AlreadyPackedException.*/.exec(err)) {
             throw new Error(`Could not execute UPX on ${handler}: ${err}`);

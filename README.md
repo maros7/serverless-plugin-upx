@@ -10,8 +10,11 @@ service: my-service
 
 plugins:
   - serverless-plugin-upx
+
+custom:
+  upx:
+    brute: true
+
 ```
 
-## Advanced Usage
-
-TBD
+Please note that valid custom options are 'faster', 'better', 'best', 'brute', 'ultraBrute', 'force' and '8mibRam'.
