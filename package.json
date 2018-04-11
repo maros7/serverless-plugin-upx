@@ -6,6 +6,10 @@
   "scripts": {
     "test": "echo \"No tests as of yet!\" && exit 0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maros7/serverless-plugin-upx"
+  },
   "keywords": [
     "serverless",
     "go",
