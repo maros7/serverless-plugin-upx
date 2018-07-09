@@ -3,6 +3,8 @@
 const semver = require('semver');
 const upx = require('upx');
 
+const os = process.platform
+
 class UPX {
   constructor(serverless, options) {
     if (!semver.satisfies(serverless.version, '>= 1.26')) {
@@ -76,7 +78,8 @@ class UPX {
         this.upx(handler).start().then((stats) => {
           this.serverless.cli.log(`Executed UPX on ${handler}: ${stats.fileSize.before} bytes -> ${stats.fileSize.after} bytes`);
         }).catch((err) => {
-          if (!/.*AlreadyPackedException.*/.exec(err)) {
+        if (!/.*AlreadyPackedException.*/.exec(err) || 
+              (os === 'darwin' && !/.*make sure to install upx native dependency with: brew install upx.*/.exec(err))) {
             throw new Error(`Could not execute UPX on ${handler}: ${err}`);
           }
         });
