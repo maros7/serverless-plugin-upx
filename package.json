@@ -1,6 +1,6 @@
 {
   "name": "serverless-plugin-upx",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Serverless Framework plugin for minifying Golang binaries with UPX (Ultimate Packer for eXecutables)",
   "main": "index.js",
   "scripts": {
